@@ -1,0 +1,46 @@
+import NodeVault from "node-vault"
+import { SecretManagerBase } from "../SecretManagerBase";
+import { ApproleCrential, IHcpVaultSecretManagerConfigs } from "./HcpVaultSecretManagerConfigs";
+
+export class HcpVaultSecretManager implements SecretManagerBase {
+  private approle: ApproleCrential;
+  private vault: NodeVault.client;
+
+  constructor(config: IHcpVaultSecretManagerConfigs) {
+    this.approle = config.approleCredential  
+
+    this.vault = NodeVault({
+      apiVersion: config.apiVersion,
+      endpoint: config.endpoint,
+      requestOptions: config.tlsOptions
+    } as NodeVault.Option);
+  }
+
+  private async loginByApprole(): Promise<void> {
+    const result = await this.vault.approleLogin({
+      role_id: this.approle.roleId,
+      secret_id: this.approle.secretId,
+    })
+
+    this.vault.token = result.auth.client_token;
+  }
+
+  async getSecrets(path: string): Promise<any> {
+    await this.loginByApprole()
+    try {
+      const result = await this.vault.read(path)
+      return result.data.data
+    } catch(ex) {
+      throw Error("Retreive Secret Failed: " + ex)
+    }
+  }
+
+  async setSecrets(path: string, data: any): Promise<any> {
+    await this.loginByApprole()
+    try {
+      await this.vault.write(path, data)
+    } catch(ex) {
+      throw new Error("Write Secrets Failed: " + ex)
+    }
+  }
+}

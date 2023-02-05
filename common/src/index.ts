@@ -4,3 +4,5 @@ export * from './decorators/singleton';
 export * from './helpers';
 export * from './mq';
 export * from './interfaces';
+export * from './secret-manager';
+export * from './wallet';
