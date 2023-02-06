@@ -32,7 +32,7 @@ WORKDIR /usr/local/guardian-service
 COPY --from=interfacesModuleBuilder /usr/local/interfaces/guardian-interfaces-*.tgz ./
 COPY --from=commonModuleBuilder /usr/local/common/guardian-common-*.tgz ./
 COPY ./guardian-service/package*.json ./
-COPY ./guardian-service/.env.docker ./.env
+# COPY ./guardian-service/.env.docker ./.env
 COPY ./guardian-service/system-schemas ./system-schemas/.
 RUN npm install --production guardian-interfaces-*.tgz guardian-common-*.tgz
 COPY --from=guardianServiceBuilder /usr/local/guardian-service/dist ./dist

@@ -32,7 +32,7 @@ WORKDIR /usr/local/logger-service
 COPY --from=interfacesModuleBuilder /usr/local/interfaces/guardian-interfaces-*.tgz ./
 COPY --from=commonModuleBuilder /usr/local/common/guardian-common-*.tgz ./
 COPY ./logger-service/package*.json ./
-COPY ./logger-service/.env.docker ./.env
+# COPY ./logger-service/.env.docker ./.env
 RUN npm install --production guardian-interfaces-*.tgz guardian-common-*.tgz
 COPY --from=loggerServiceBuilder /usr/local/logger-service/dist ./dist
 RUN rm guardian-*.tgz
