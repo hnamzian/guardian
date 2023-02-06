@@ -21,7 +21,7 @@ COPY --from=interfacesModuleBuilder /usr/local/interfaces/guardian-interfaces-*.
 COPY --from=commonModuleBuilder /usr/local/common/guardian-common-*.tgz ./
 COPY ./api-gateway/package*.json ./
 COPY ./api-gateway/tsconfig*.json ./
-COPY ./api-gateway/.env.docker ./.env
+# COPY ./api-gateway/.env.docker ./.env
 RUN npm install guardian-interfaces-*.tgz guardian-common-*.tgz
 ADD ./api-gateway/src ./src/.
 RUN npm run build:prod
@@ -33,7 +33,7 @@ WORKDIR /usr/api-gateway
 COPY --from=interfacesModuleBuilder /usr/local/interfaces/guardian-interfaces-*.tgz ./
 COPY --from=commonModuleBuilder /usr/local/common/guardian-common-*.tgz ./
 COPY ./api-gateway/package*.json ./
-COPY ./api-gateway/.env.docker ./.env
+# COPY ./api-gateway/.env.docker ./.env
 RUN npm install --production guardian-interfaces-*.tgz guardian-common-*.tgz
 COPY --from=apiGatewayBuilder /usr/local/api-gateway/dist ./dist
 RUN rm guardian-*.tgz

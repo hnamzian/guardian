@@ -32,7 +32,7 @@ WORKDIR /usr/local/policy-service
 COPY --from=interfacesModuleBuilder /usr/local/interfaces/guardian-interfaces-*.tgz ./
 COPY --from=commonModuleBuilder /usr/local/common/guardian-common-*.tgz ./
 COPY ./policy-service/package*.json ./
-COPY ./policy-service/.env.docker ./.env
+# COPY ./policy-service/.env.docker ./.env
 RUN npm install --production guardian-interfaces-*.tgz guardian-common-*.tgz
 COPY --from=policyServiceBuilder /usr/local/policy-service/dist ./dist
 RUN rm guardian-*.tgz
