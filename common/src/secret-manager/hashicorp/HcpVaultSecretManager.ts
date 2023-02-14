@@ -28,9 +28,12 @@ export class HcpVaultSecretManager implements SecretManagerBase {
   async getSecrets(path: string): Promise<any> {
     await this.loginByApprole()
     try {
-      const result = await this.vault.read(path)
+      const result = await this.vault.read(this.getSecretId(path))
       return result.data.data
     } catch(ex) {
+      if(ex.response.statusCode == 404) {
+        return null;
+      }
       throw Error("Retreive Secret Failed: " + ex)
     }
   }
@@ -38,9 +41,13 @@ export class HcpVaultSecretManager implements SecretManagerBase {
   async setSecrets(path: string, data: any): Promise<any> {
     await this.loginByApprole()
     try {
-      await this.vault.write(path, data)
+      await this.vault.write(this.getSecretId(path), { data })
     } catch(ex) {
       throw new Error("Write Secrets Failed: " + ex)
     }
+  }
+
+  private getSecretId(path: string): string {
+    return `secret/data/${path}`;
   }
 }

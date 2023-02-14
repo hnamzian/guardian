@@ -49,11 +49,9 @@ export async function configAPI(
             }
 
             const secretManager = SecretManager.New();
-            await secretManager.setSecrets('secret/data/keys/operator', {
-                data: {
-                    OPERATOR_ID: settings.operatorId,
-                    OPERATOR_KEY: settings.operatorKey,
-                }
+            await secretManager.setSecrets('keys/operator', {
+                OPERATOR_ID: settings.operatorId,
+                OPERATOR_KEY: settings.operatorKey,
             });
             
             await new Workers().updateSettings({
@@ -73,7 +71,7 @@ export async function configAPI(
     ApiResponse(channel, MessageAPI.GET_SETTINGS, async (msg) => {
         try {
             const secretManager = SecretManager.New();
-            const { OPERATOR_ID } = await secretManager.getSecrets('secret/data/keys/operator');
+            const { OPERATOR_ID } = await secretManager.getSecrets('keys/operator');
 
             return new MessageResponse({
                 operatorId: OPERATOR_ID,

@@ -18,8 +18,8 @@ export class Wallet {
    * @param key
    */
   public async getKey(token: string, type: string, key: string): Promise<string> {
-    const result = await this.secretManager.getSecrets(`secret/data/wallet/${this.generateKeyName(token, type, key)}`);   
-    return result.privateKey;
+    const result = await this.secretManager.getSecrets(`wallet/${this.generateKeyName(token, type, key)}`);   
+    return result ? result.privateKey : null;
   }
 
   /**
@@ -30,10 +30,8 @@ export class Wallet {
    * @param value
    */
   public async setKey(token: string, type: string, key: string, value: string): Promise<void>{
-    await this.secretManager.setSecrets(`secret/data/wallet/${this.generateKeyName(token, type, key)}`, {
-      data: {
-        privateKey: value
-      }
+    await this.secretManager.setSecrets(`wallet/${this.generateKeyName(token, type, key)}`, {
+      privateKey: value,
     })
   }
 
